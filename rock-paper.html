@@ -1,241 +1,266 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
+  </head>
 
-<body>
+  <body>
+    <h1 style="color: white">Rock Paper Scissor</h1>
     <div>
+      <button onclick="handleClick('Rock')" class="btn rock_btn">
+        <img src="assets/rock-emoji.png" alt="" />
+      </button>
+      <button onclick="handleClick('Paper')" class="btn paper_btn">
+        <img src="assets/paper-emoji.png" alt="" />
+      </button>
 
-
-        <button onclick="handleClick('Rock')" class="btn"><img src="assets/rock-emoji.png" alt=""></button>
-        <button onclick="handleClick('Paper')" class="btn"><img src="assets/paper-emoji.png" alt=""></button>
-
-        <button onclick="handleClick('Scissors')" class="btn"><img src="assets/scissors-emoji.png" alt=""></button>
+      <button onclick="handleClick('Scissors')" class="btn scissors_btn">
+        <img src="assets/scissors-emoji.png" alt="" />
+      </button>
     </div>
-
 
     <p class="choice"></p>
     <div>
-
-        <img class="playerimg" src="" alt="">
-        <img class="compimg" src="" alt="">
+      <img class="playerimg" src="" alt="" />
+      <img class="compimg" src="" alt="" />
     </div>
     <p class="result"></p>
     <p class="winss"></p>
-    <button class="reset_btn" onclick="resetBtn()">Reset</button>
+    <div>
+      <button class="reset_btn" onclick="handleReset()">Reset</button>
+      <button class="autoplay" onclick="autoPlay()">AutoPlay</button>
+    </div>
+    <div class="sure" style="background-color: azure"></div>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            background-color: rgb(64, 64, 64);
-        }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background-color: rgb(64, 64, 64);
+      }
 
-        .btn {
-            padding: 30px;
-            background-color: bisque;
-            border: solid 10px rgba(39, 162, 8, 0.228);
-            border-radius: 10000px;
-            cursor: pointer;
-            margin: 10px;
-        }
+      .btn {
+        padding: 30px;
+        background-color: bisque;
+        border: solid 10px rgba(39, 162, 8, 0.228);
+        border-radius: 10000px;
+        cursor: pointer;
+        margin: 10px;
+      }
 
-        .btn:hover {
-            border: solid 8px rgb(51, 251, 1);
-        }
+      .btn:hover {
+        border: solid 8px rgb(51, 251, 1);
+      }
 
-        .btn:active {
-            border: solid 10px rgb(64, 64, 64);
-        }
+      .btn:active {
+        border: solid 10px rgb(64, 64, 64);
+      }
 
-        .choice,
-        .winss {
-            color: white;
-        }
+      .choice,
+      .winss {
+        color: white;
+      }
 
-        .choice span {
-            color: rgb(255, 255, 255);
-            font-weight: bold;
-        }
+      .choice span {
+        color: rgb(255, 255, 255);
+        font-weight: bold;
+      }
 
-        .result {
-            color: white;
-            font-weight: bold;
-            font-size: 40px;
-        }
+      .result {
+        color: white;
+        font-weight: bold;
+        font-size: 40px;
+      }
 
-        .playerimg,
-        .compimg {
-            display: inline-block;
-            width: 70px;
-        }
+      .playerimg,
+      .compimg {
+        display: inline-block;
+        width: 70px;
+      }
 
-        .reset_btn {
-            background-color: rgba(255, 0, 0, 0.529);
-            cursor: pointer;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 100px;
-        }
+      .reset_btn {
+        background-color: rgba(255, 0, 0, 0.529);
+        cursor: pointer;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 100px;
+      }
 
-        .reset_btn:hover {
-            border: solid 3px red;
-        }
+      .reset_btn:hover {
+        border: solid 3px red;
+      }
 
-        .reset_btn:active {
-            border: solid 0px red;
-        }
+      .reset_btn:active {
+        border: solid 0px red;
+      }
 
-        .redd {
-            color: red;
-        }
+      .redd {
+        color: red;
+      }
 
-        .yelloww {
-            color: yellow;
-        }
+      .yelloww {
+        color: yellow;
+      }
 
-        .greenn {
-            color: green;
-        }
-        .dissapp{
-            opacity: 0;
-        }
+      .greenn {
+        color: green;
+      }
+      .dissapp {
+        opacity: 0;
+      }
     </style>
 
     <script>
-        let result = '';
-        let winsobj = (JSON.parse(localStorage.getItem('wins'))) || {
-            wins: 0,
-            loses: 0,
-            tie: 0
-        };
-        document.querySelector('.winss').innerHTML = `You Won : <span>${winsobj.wins}</span> <br>
+      document.body.addEventListener("keydown", (event) => {
+        console.log(event.key);
+        if (event.key == "r") {
+          handleClick("Rock");
+        } else if (event.key == "p") {
+          handleClick("Paper");
+        } else if (event.key == "s") {
+          handleClick("Scissors");
+        }
+        else if (event.key == "Backspace") {
+          handleReset();
+        }
+                else if (event.key == "a") {
+          autoPlay();
+        }
+      });
+      let result = "";
+      let winsobj = JSON.parse(localStorage.getItem("wins")) || {
+        wins: 0,
+        loses: 0,
+        tie: 0,
+      };
+      document.querySelector(".winss").innerHTML =
+        `You Won : <span>${winsobj.wins}</span> <br>
         You Lost : <span>${winsobj.loses}</span> <br> Ties : <span>${winsobj.tie}</span>`;
-        HandleBtn();
-        
-        function handleClick(choice) {
-            computerMove = computerOut();
-            const moveObj = {
-                myChoice: choice,
-                compChoice: computerMove
-            }
-            if (choice === 'Rock') {
-                if (computerMove === 'Rock') {
-                    result = 'Tie';
-                }
-                else if (computerMove === 'Paper') {
-                    result = 'Lose';
-                }
-                else {
-                    result = 'Win'
-                }
-            }
-            else if (choice === 'Paper') {
-                if (computerMove === 'Rock') {
-                    result = 'Win';
-                }
-                else if (computerMove === 'Paper') {
-                    result = 'Tie';
-                }
-                else {
-                    result = 'Lose'
-                }
-            }
-            else {
-                if (computerMove === 'Rock') {
-                    result = 'Lose';
-                }
-                else if (computerMove === 'Paper') {
-                    result = 'Win';
-                }
-                else {
-                    result = 'Tie'
-                }
-            }
-            if (result === 'Win') {
-                winsobj.wins += 1;
+      HandleBtn();
+      let isActive = false;
+      let Id = null;
+      function handleReset() {
+        document.querySelector(".sure").innerHTML = document.querySelector(
+          ".sure",
+        ).innerHTML
+          ? ""
+          : `      <p>Are you sure you want to Reset Score</p>
+      <button onclick='document.querySelector(".sure").innerHTML="";resetBtn();'>Yes</button>
+      <button onclick='document.querySelector(".sure").innerHTML="";'>No</button>`;
+      }
+      function autoPlay() {
+        if (!isActive) {
+          isActive = true;
 
-                document.querySelector('.result')
-                    .classList.remove('redd');
-                document.querySelector('.result')
-                    .classList.remove('yelloww');
-                document.querySelector('.result')
-                    .classList.add('greenn');
-            }
-            else if (result === 'Lose') {
-                winsobj.loses += 1;
-                document.querySelector('.result')
-                    .classList.remove('greenn');
-                document.querySelector('.result')
-                    .classList.remove('yelloww');
-                document.querySelector('.result')
-                    .classList.add('redd');
-            }
-            else {
-                winsobj.tie += 1;
-                document.querySelector('.result')
-                    .classList.remove('redd');
-                document.querySelector('.result')
-                    .classList.remove('greenn');
-                document.querySelector('.result')
-                    .classList.add('yelloww');
-            }
-            updatePage(winsobj)
-
-        HandleBtn();
-            /*        document.querySelector('.choice').innerHTML = `You : <span>${moveObj.myChoice}</span> <br>
-            Computer : <span>${moveObj.compChoice}</span>`;
-            */
-            document.querySelector('.playerimg')
-                .src = `assets/${choice.toLowerCase()}-emoji.png`
-            document.querySelector('.compimg')
-                .src = `assets/${computerMove.toLowerCase()}-emoji.png`
-            document.querySelector('.result').innerHTML = result;
-            document.querySelector('.winss').innerHTML = `You Won : <span>${winsobj.wins}</span> <br>
-           You Lost : <span>${winsobj.loses}</span> <br> Ties : <span>${winsobj.tie}</span>`;
+          Id = setInterval(() => {
+            handleClick(computerOut());
+          }, 1000);
+        } else {
+          clearInterval(Id);
+          isActive = false;
+        }
+      }
+      function handleClick(choice) {
+        computerMove = computerOut();
+        const moveObj = {
+          myChoice: choice,
+          compChoice: computerMove,
         };
-
-        function computerOut() {
-            const randomnum = Math.random();
-            if (randomnum < 1 / 3) {
-                return 'Rock'
-            }
-            else if (randomnum < 2 / 3 && randomnum >= 1 / 3) {
-                return 'Paper'
-            }
-            else {
-                return 'Scissors'
-            }
+        if (choice === "Rock") {
+          if (computerMove === "Rock") {
+            result = "Tie";
+          } else if (computerMove === "Paper") {
+            result = "Lose";
+          } else {
+            result = "Win";
+          }
+        } else if (choice === "Paper") {
+          if (computerMove === "Rock") {
+            result = "Win";
+          } else if (computerMove === "Paper") {
+            result = "Tie";
+          } else {
+            result = "Lose";
+          }
+        } else {
+          if (computerMove === "Rock") {
+            result = "Lose";
+          } else if (computerMove === "Paper") {
+            result = "Win";
+          } else {
+            result = "Tie";
+          }
         }
+        if (result === "Win") {
+          winsobj.wins += 1;
 
-        function resetBtn() {
-            winsobj.wins = 0;
-            winsobj.loses = 0;
-            winsobj.tie = 0;
-            updatePage(winsobj)
-            document.querySelector('.winss').innerHTML = `You Won : <span>${winsobj.wins}</span> <br>
+          document.querySelector(".result").classList.remove("redd");
+          document.querySelector(".result").classList.remove("yelloww");
+          document.querySelector(".result").classList.add("greenn");
+        } else if (result === "Lose") {
+          winsobj.loses += 1;
+          document.querySelector(".result").classList.remove("greenn");
+          document.querySelector(".result").classList.remove("yelloww");
+          document.querySelector(".result").classList.add("redd");
+        } else {
+          winsobj.tie += 1;
+          document.querySelector(".result").classList.remove("redd");
+          document.querySelector(".result").classList.remove("greenn");
+          document.querySelector(".result").classList.add("yelloww");
+        }
+        updatePage(winsobj);
+
+        HandleBtn();
+        document.querySelector(".playerimg").src =
+          `assets/${choice.toLowerCase()}-emoji.png`;
+        document.querySelector(".compimg").src =
+          `assets/${computerMove.toLowerCase()}-emoji.png`;
+        document.querySelector(".result").innerHTML = result;
+        document.querySelector(".winss").innerHTML =
+          `You Won : <span>${winsobj.wins}</span> <br>
            You Lost : <span>${winsobj.loses}</span> <br> Ties : <span>${winsobj.tie}</span>`;
-            HandleBtn();
-        }
-        function updatePage(aa) {
-            localStorage.setItem('wins', JSON.stringify(aa));
+      }
 
+      function computerOut() {
+        const randomnum = Math.random();
+        if (randomnum < 1 / 3) {
+          return "Rock";
+        } else if (randomnum < 2 / 3 && randomnum >= 1 / 3) {
+          return "Paper";
+        } else {
+          return "Scissors";
         }
-        function HandleBtn(){
-            if ((winsobj.wins === 0) &&  (winsobj.loses === 0) && (winsobj.tie === 0)){
-                document.querySelector('.reset_btn').classList.add("dissapp");
-            }
-            else{
-                document.querySelector('.reset_btn').classList.remove("dissapp");
-            }
+      }
+
+      function resetBtn() {
+        winsobj.wins = 0;
+        winsobj.loses = 0;
+        winsobj.tie = 0;
+        updatePage(winsobj);
+                document.querySelector(".playerimg").src =
+          ``;
+        document.querySelector(".compimg").src =
+          ``;
+        document.querySelector(".result").innerHTML = '';
+        document.querySelector(".winss").innerHTML =
+          `You Won : <span>${winsobj.wins}</span> <br>
+           You Lost : <span>${winsobj.loses}</span> <br> Ties : <span>${winsobj.tie}</span>`;
+        HandleBtn();
+      }
+      function updatePage(aa) {
+        localStorage.setItem("wins", JSON.stringify(aa));
+      }
+      function HandleBtn() {
+        if (winsobj.wins === 0 && winsobj.loses === 0 && winsobj.tie === 0) {
+          document.querySelector(".reset_btn").classList.add("dissapp");
+        } else {
+          document.querySelector(".reset_btn").classList.remove("dissapp");
         }
+      }
     </script>
-</body>
-
+  </body>
 </html>
